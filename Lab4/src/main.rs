@@ -13,7 +13,7 @@ const SIGMA_Y: f64 = 0.1 * Y_MAX;
 const TOL: f64 = 1e-8;
 
 fn main() {
-    fs::create_dir_all("plots").expect("Unable to create folder!");
+    fs::create_dir_all("/plots").expect("Unable to create folder!");
 
     let mut ro: [[f64; NY + 1]; NX + 1] = [[0.0; NY + 1]; NX + 1];
     for i in 0..=NX {
