@@ -7,10 +7,12 @@ for k in [16, 8, 4, 2, 1]:
 
 	plt.figure()
 
-	v = np.loadtxt('v_' + str(k) + '.txt')
+	v = np.loadtxt('v_' + str(k) + '.txt').reshape((128//k+1, 128//k+1))
+	x = np.loadtxt('v_grid_x_' + str(k) + '.txt')
+	y = np.loadtxt('v_grid_y_' + str(k) + '.txt')
 
-	plt.tricontourf(v[:, 0], v[:, 1], v[:, 2], levels=np.linspace(min(v[:, 2]), max(v[:, 2]), 999))
-	plt.colorbar(ticks=np.linspace(min(v[:, 2]), max(v[:, 2]), 11))
+	plt.pcolor(x, y, np.transpose(v), vmin=np.amin(v), vmax=np.amax(v), shading='auto')
+	plt.colorbar()
 
 	plt.title('Potencjał $V(x,y)$ ($k = ' + str(k) + '$)')
 
