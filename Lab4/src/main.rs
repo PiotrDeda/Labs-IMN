@@ -15,10 +15,10 @@ const TOL: f64 = 1e-8;
 fn main() {
     fs::create_dir_all("/plots").expect("Unable to create folder!");
 
-    let mut ro: [[f64; NY + 1]; NX + 1] = [[0.0; NY + 1]; NX + 1];
+    let mut rho: [[f64; NY + 1]; NX + 1] = [[0.0; NY + 1]; NX + 1];
     for i in 0..=NX {
         for j in 0..=NY {
-            ro[i][j] = calc_ro(i as f64 * DELTA, j as f64 * DELTA);
+            rho[i][j] = calc_rho(i as f64 * DELTA, j as f64 * DELTA);
         }
     }
 
@@ -62,7 +62,7 @@ fn main() {
                             + vs[i - 1][j]
                             + vs[i][j + 1]
                             + vs[i][j - 1]
-                            + DELTA * DELTA * ro[i][j] / EPSILON);
+                            + DELTA * DELTA * rho[i][j] / EPSILON);
                 }
             }
 
@@ -87,7 +87,7 @@ fn main() {
                             / DELTA
                             + 0.5 * (vs[i][j + 1] - vs[i][j]) / DELTA * (vs[i][j + 1] - vs[i][j])
                                 / DELTA
-                            - ro[i][j] * vs[i][j]);
+                            - rho[i][j] * vs[i][j]);
                 }
             }
 
@@ -104,7 +104,7 @@ fn main() {
             for j in 1..NY {
                 err[i][j] = (vn[i + 1][j] - 2.0 * vn[i][j] + vn[i - 1][j]) / (DELTA * DELTA)
                     + (vn[i][j + 1] - 2.0 * vn[i][j] + vn[i][j - 1]) / (DELTA * DELTA)
-                    + ro[i][j] / EPSILON;
+                    + rho[i][j] / EPSILON;
                 writeln!(
                     f_err,
                     "{} {} {}",
@@ -159,7 +159,7 @@ fn main() {
                                 + v[i - 1][j]
                                 + v[i][j + 1]
                                 + v[i][j - 1]
-                                + DELTA * DELTA * ro[i][j] / EPSILON);
+                                + DELTA * DELTA * rho[i][j] / EPSILON);
                 }
             }
 
@@ -177,7 +177,7 @@ fn main() {
                         * (0.5 * (v[i + 1][j] - v[i][j]) / DELTA * (v[i + 1][j] - v[i][j]) / DELTA
                             + 0.5 * (v[i][j + 1] - v[i][j]) / DELTA * (v[i][j + 1] - v[i][j])
                                 / DELTA
-                            - ro[i][j] * v[i][j]);
+                            - rho[i][j] * v[i][j]);
                 }
             }
 
@@ -192,12 +192,12 @@ fn main() {
     }
 }
 
-fn calc_ro(x: f64, y: f64) -> f64 {
-    let ro_1 = (-(x - 0.35 * X_MAX) * (x - 0.35 * X_MAX) / (SIGMA_X * SIGMA_X)
+fn calc_rho(x: f64, y: f64) -> f64 {
+    let rho_1 = (-(x - 0.35 * X_MAX) * (x - 0.35 * X_MAX) / (SIGMA_X * SIGMA_X)
         - (y - 0.5 * Y_MAX) * (y - 0.5 * Y_MAX) / (SIGMA_Y * SIGMA_Y))
         .exp();
-    let ro_2 = -(-(x - 0.65 * X_MAX) * (x - 0.65 * X_MAX) / (SIGMA_X * SIGMA_X)
+    let rho_2 = -(-(x - 0.65 * X_MAX) * (x - 0.65 * X_MAX) / (SIGMA_X * SIGMA_X)
         - (y - 0.5 * Y_MAX) * (y - 0.5 * Y_MAX) / (SIGMA_Y * SIGMA_Y))
         .exp();
-    ro_1 + ro_2
+    rho_1 + rho_2
 }
